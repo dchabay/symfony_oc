@@ -1,0 +1,21 @@
+{# src/OC/PlatformBundle/Resources/views/Advert/categVip.html.twig #}
+
+{% extends "OCPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  Lecture d'une annonce - {{ parent() }}
+{% endblock %}
+
+{% block ocplatform_body %}
+<ul class="nav nav-pills nav-stacked">
+  {% for advert in listAdverts %}
+    <li>
+      <a href="{{ path('oc_platform_view', {'id': advert.id}) }}">
+        {{ advert.title }}
+      </a>
+    </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
+

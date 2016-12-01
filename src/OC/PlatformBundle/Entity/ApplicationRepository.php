@@ -10,4 +10,6 @@ namespace OC\PlatformBundle\Entity;
  */
 class ApplicationRepository extends \Doctrine\ORM\EntityRepository
 {
+    //public function getApplicationsWithAdvert($limit)
+        
 }

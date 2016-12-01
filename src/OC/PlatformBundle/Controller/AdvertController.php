@@ -232,4 +232,41 @@ class AdvertController extends Controller
       'listAdverts' => $listAdverts
     ));
   }
+    public function listAction()
+    {
+      $listAdverts = $this
+        ->getDoctrine()
+        ->getManager()
+        ->getRepository('OCPlatformBundle:Advert')
+        ->getAdvertWithApplications()
+      ;
+
+      foreach ($listAdverts as $advert) {
+        // Ne déclenche pas de requête : les candidatures sont déjà chargées !
+        // Vous pourriez faire une boucle dessus pour les afficher toutes
+        $advert->getApplications();
+      }
+    }
+   
+    public function categVipAction()
+    {
+      $listAdverts = $this
+        ->getDoctrine()
+        ->getManager()
+        ->getRepository('OCPlatformBundle:Advert')
+        ->getAdvertWithCategories(array('Développeur', 'Intégrateur'));
+      ;
+
+      foreach ($listAdverts as $advert) {
+        // Ne déclenche pas de requête : les candidatures sont déjà chargées !
+        // Vous pourriez faire une boucle dessus pour les afficher toutes
+        $advert->getCategories();
+      }
+      
+
+    return $this->render('OCPlatformBundle:Advert:categVip.html.twig', array(
+      'listAdverts' => $listAdverts
+    ));
+      
+    }
 }

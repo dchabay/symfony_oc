@@ -33,3 +33,9 @@ oc_platform_delete:
         _controller: OCPlatformBundle:Advert:delete
     requirements:
         id: \d+
+        
+oc_platform_tstcateg:
+    path:      /tstCateg
+    defaults:
+        _controller: OCPlatformBundle:Advert:categVip
+
