@@ -133,7 +133,7 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
             ->addSelect('cat');
 
         foreach ($categoryNames as $name) {
-            $qb->orWhere('cat.name = : name')->setParameter('name', $name);
+            $qb->orWhere('cat.name = :name')->setParameter('name', $name);
         }
 
         return $qb

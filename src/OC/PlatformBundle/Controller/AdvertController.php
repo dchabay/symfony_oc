@@ -254,7 +254,29 @@ class AdvertController extends Controller
         ->getDoctrine()
         ->getManager()
         ->getRepository('OCPlatformBundle:Advert')
-        ->getAdvertWithCategories(array('Développeur', 'Intégrateur'));
+        ->getAdvertWithCategories(array('Développement web', 'Intégration'));
+      ;
+
+      foreach ($listAdverts as $advert) {
+        // Ne déclenche pas de requête : les candidatures sont déjà chargées !
+        // Vous pourriez faire une boucle dessus pour les afficher toutes
+        $advert->getCategories();
+      }
+      
+
+    return $this->render('OCPlatformBundle:Advert:categVip.html.twig', array(
+      'listAdverts' => $listAdverts
+    ));
+      
+    }
+   
+    public function lastApplicationsAction()
+    {
+      $listAdverts = $this
+        ->getDoctrine()
+        ->getManager()
+        ->getRepository('OCPlatformBundle:Advert')
+        ->getAdvertWithCategories(array('Développement web', 'Intégration'));
       ;
 
       foreach ($listAdverts as $advert) {
