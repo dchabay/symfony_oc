@@ -38,4 +38,9 @@ oc_platform_tstcateg:
     path:      /tstCateg
     defaults:
         _controller: OCPlatformBundle:Advert:categVip
+        
+oc_platform_lastapplications:
+    path:      /lastApp
+    defaults:
+        _controller: OCPlatformBundle:Advert:lastApplications
 

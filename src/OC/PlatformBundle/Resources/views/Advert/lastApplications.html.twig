@@ -9,10 +9,10 @@
 {% block ocplatform_body %}
     <h2>Dernières candidatures</h2>
 <ul class="nav nav-pills nav-stacked">
-  {% for advert in listAdverts %}
+  {% for application in listAdverts %}
     <li>
-      <a href="{{ path('oc_platform_view', {'id': advert.id}) }}">Titre - 
-        {{ advert.title }}
+      <a href="{{ path('oc_platform_view', {'id': application.advert.id}) }}"> 
+        {{ application.advert.title }} le {{ application.date|date('d/m/Y H:i:s') }}
       </a>
     </li>
   {% endfor %}

@@ -3,6 +3,8 @@
 
 namespace OC\PlatformBundle\Repository;
 
+use Doctrine\ORM\QueryBuilder;
+
 /**
  * AdvertRepository
  *
@@ -11,32 +13,31 @@ namespace OC\PlatformBundle\Repository;
  */
 class AdvertRepository extends \Doctrine\ORM\EntityRepository
 {
-  public function myFindAll()
-  {
-    // Méthode 1 : en passant par l'EntityManager
-    $queryBuilder = $this->_em->createQueryBuilder()
-      ->select('a')
-      ->from($this->_entityName, 'a')
-    ;
-    // Dans un repository, $this->_entityName est le namespace de l'entité gérée
-    // Ici, il vaut donc OC\PlatformBundle\Entity\Advert
+    public function myFindAll()
+    {
+      // Méthode 1 : en passant par l'EntityManager
+      $queryBuilder = $this->_em->createQueryBuilder()
+        ->select('a')
+        ->from($this->_entityName, 'a')
+      ;
+      // Dans un repository, $this->_entityName est le namespace de l'entité gérée
+      // Ici, il vaut donc OC\PlatformBundle\Entity\Advert
 
-    // Méthode 2 : en passant par le raccourci (je recommande)
-    $queryBuilder = $this->createQueryBuilder('a');
+      // Méthode 2 : en passant par le raccourci (je recommande)
+      $queryBuilder = $this->createQueryBuilder('a');
 
-    // On n'ajoute pas de critère ou tri particulier, la construction
-    // de notre requête est finie
+      // On n'ajoute pas de critère ou tri particulier, la construction
+      // de notre requête est finie
 
-    // On récupère la Query à partir du QueryBuilder
-    $query = $queryBuilder->getQuery();
+      // On récupère la Query à partir du QueryBuilder
+      $query = $queryBuilder->getQuery();
 
-    // On récupère les résultats à partir de la Query
-    $results = $query->getResult();
+      // On récupère les résultats à partir de la Query
+      $results = $query->getResult();
 
-    // On retourne ces résultats
-    return $results;
-  }
-  
+      // On retourne ces résultats
+      return $results;
+    }
 
     public function myFindOne($id)
     {
@@ -52,7 +53,7 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
         ->getResult()
       ;
     }  
-    
+
     public function findByAuthorAndDate($author, $year)
     {
       $qb = $this->createQueryBuilder('a');
@@ -69,15 +70,16 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
         ->getResult()
       ;
     }
-  public function whereCurrentYear(QueryBuilder $qb)
-  {
-    $qb
-      ->andWhere('a.date BETWEEN :start AND :end')
-      ->setParameter('start', new \Datetime(date('Y').'-01-01'))  // Date entre le 1er janvier de cette année
-      ->setParameter('end',   new \Datetime(date('Y').'-12-31'))  // Et le 31 décembre de cette année
-    ;
-  }
-  
+    
+    public function whereCurrentYear(QueryBuilder $qb)
+    {
+      $qb
+        ->andWhere('a.date BETWEEN :start AND :end')
+        ->setParameter('start', new \Datetime(date('Y').'-01-01'))  // Date entre le 1er janvier de cette année
+        ->setParameter('end',   new \Datetime(date('Y').'-12-31'))  // Et le 31 décembre de cette année
+      ;
+    }
+
     public function myFind()
     {
       $qb = $this->createQueryBuilder('a');
@@ -99,7 +101,7 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
         ->getResult()
       ;
     }
-    
+
     public function getAdvertWithApplications()
     {
       $qb = $this
@@ -114,31 +116,29 @@ class AdvertRepository extends \Doctrine\ORM\EntityRepository
         ->getResult()
       ;
     }
-    
+
     public function getAdvertWithCategories(array $categoryNames)
     {
-/*
-    // On fait une jointure avec l'entité Category avec pour alias « c »
-    $qb
-      ->innerJoin('a.categories', 'c')
-      ->addSelect('c')
-    ;
+    /*
+      // On fait une jointure avec l'entité Category avec pour alias « c »
+      $qb
+        ->innerJoin('a.categories', 'c')
+        ->addSelect('c')
+      ;
 
-    // Puis on filtre sur le nom des catégories à l'aide d'un IN
-    $qb->where($qb->expr()->in('c.name', $categoryNames));
-*/
-    $qb = $this
-            ->createQueryBuilder('a')
-            ->leftJoin('a.categories', 'cat')
-            ->addSelect('cat');
+      // Puis on filtre sur le nom des catégories à l'aide d'un IN
+      $qb->where($qb->expr()->in('c.name', $categoryNames));
+    */
+        $qb = $this
+              ->createQueryBuilder('a')
+              ->leftJoin('a.categories', 'cat')
+              ->addSelect('cat');
+        
+        $qb->where($qb->expr()->in('cat.name', $categoryNames));              
 
-        foreach ($categoryNames as $name) {
-            $qb->orWhere('cat.name = :name')->setParameter('name', $name);
-        }
-
-        return $qb
-            ->getQuery()
-            ->getResult()
-        ;
+          return $qb
+              ->getQuery()
+              ->getResult()
+          ;
     }
 }
