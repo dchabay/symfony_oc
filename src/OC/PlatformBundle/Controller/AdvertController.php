@@ -86,6 +86,7 @@ class AdvertController extends Controller
     $lipsum = substr(simplexml_load_file('http://www.lipsum.com/feed/xml?amount=1&what=paras&start=2')->lipsum, 0, 3);
     $advert->setTitle('Recherche développeur ' . $lipsum . '.');
     $advert->setAuthor('Alexandre ' . substr(md5(rand()), 0, 3));
+    $advert->setAuthorEmail('ddchamot@hotmail.com' );
     $advert->setContent(substr(md5(rand()), 0, 5) . " Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…");
 
     // On récupère toutes les compétences possibles
@@ -121,6 +122,14 @@ class AdvertController extends Controller
 
     // On lie les candidatures à l'annonce
     $application1->setAdvert($advert);
+
+    // Création d'une première candidature
+    $application2 = new Application();
+    $application2->setAuthor('Serge ' . substr(md5(rand()), 0, 3) );
+    $application2->setContent("C'est moi qu'il vous faut. " . substr(md5(rand()), 0, 3));
+
+    // On lie les candidatures à l'annonce
+    $application2->setAdvert($advert);
 
       
     // On lie l'image à l'annonce
@@ -161,6 +170,8 @@ class AdvertController extends Controller
     if (null === $advert) {
       throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
     }
+    
+    $advert->setAuthor($advert->getAuthor() + 'zZz');
 
     // La méthode findAll retourne toutes les catégories de la base de données
     $listCategories = $em->getRepository('OCPlatformBundle:Category')->findAll();
